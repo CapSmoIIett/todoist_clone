@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoist_clone/ui/core/ui/task_list.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -20,35 +21,38 @@ class HomeScreen extends StatelessWidget {
                   Icons.search,
                   color: Colors.white,
                 ),
-                onPressed: () {}
-            ),
+                onPressed: () {}),
             IconButton(
                 icon: Icon(
                   Icons.add_alert,
                   color: Colors.white,
                 ),
-                onPressed: () {}
-            ),
+                onPressed: () {}),
             IconButton(
                 icon: Icon(
                   Icons.settings,
                   color: Colors.white,
                 ),
-                onPressed: () {}
-            )
+                onPressed: () {})
           ],
         ),
         body: ListView.separated(
           itemCount: _defaul_buttons.length,
           itemBuilder: (context, index) {
-            return Container(
-              height: 30,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: _defaul_buttons[index]!,
+            return GestureDetector(
+              child: Container(
+                height: 30,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: _defaul_buttons[index]!,
+                  ),
                 ),
               ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TaskList()));
+              },
             );
           },
           separatorBuilder: (context, index) => Divider(
