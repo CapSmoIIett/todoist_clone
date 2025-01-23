@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todoist_clone/ui/core/ui/add_task_button.dart';
+import 'package:todoist_clone/ui/models/task_model.dart';
 
 class TaskList extends StatelessWidget {
-  TaskList({Key? key}) : super(key: key);
+  TaskList({required this.tasksList, Key? key}) : super(key: key);
 
-  List<String> exampleTask = ['Clean shit', 'cook diner', 'write book', 'learn flutter'];
+  final List<TaskModel> tasksList;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,12 @@ class TaskList extends StatelessWidget {
         ),
       ]),
       body: ListView.separated(
-        itemCount: exampleTask.length,
+        itemCount: tasksList.length,
         itemBuilder: (context, index){
           return Dismissible(
-            key: ValueKey<String>(exampleTask[index]), 
+            key: ValueKey<String>(tasksList[index].title), 
             child: ListTile(
-              title: Text (exampleTask[index]),
+              title: Text (tasksList[index].title),
             ), 
             onDismissed: (DismissDirection direction) {
 

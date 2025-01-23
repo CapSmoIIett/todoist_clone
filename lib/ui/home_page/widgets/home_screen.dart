@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:todoist_clone/ui/Inbox_page/widgets/inbox_screen.dart';
 import 'package:todoist_clone/ui/core/ui/add_task_button.dart';
 import 'package:todoist_clone/ui/core/ui/task_list.dart';
+
+import 'package:todoist_clone/ui/Inbox_page/view_model/inbox_model.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -52,7 +55,7 @@ class HomeScreen extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TaskList()));
+                    MaterialPageRoute(builder: (context) => InboxScreen(inboxModel: InboxModel())));
               },
             );
           },
