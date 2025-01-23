@@ -4,7 +4,7 @@ import 'package:todoist_clone/ui/core/ui/task_list.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  Map<int, List<Widget>> _defaul_buttons = {
+  final Map<int, List<Widget>> _defaulButtons = {
     0: [Icon(Icons.inbox, color: Colors.blue), Text('Inbox')],
     1: [Icon(Icons.calendar_today, color: Colors.green), Text('Today')],
     2: [Icon(Icons.calendar_month, color: Colors.purple), Text('Upcoming')],
@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: ListView.separated(
-          itemCount: _defaul_buttons.length,
+          itemCount: _defaulButtons.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               child: Container(
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
-                    children: _defaul_buttons[index]!,
+                    children: _defaulButtons[index]!,
                   ),
                 ),
               ),
