@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoist_clone/ui/core/ui/add_task_button.dart';
 
 class TaskList extends StatelessWidget {
   TaskList({Key? key}) : super(key: key);
@@ -50,6 +51,7 @@ class TaskList extends StatelessWidget {
           thickness: 0.1,
         ),
       ),
+      floatingActionButton: AddTaskButton(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoist_clone/ui/core/ui/add_task_button.dart';
 import 'package:todoist_clone/ui/core/ui/task_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -58,6 +59,8 @@ class HomeScreen extends StatelessWidget {
           separatorBuilder: (context, index) => Divider(
             thickness: 0.1,
           ),
-        ));
+        ),
+        floatingActionButton: AddTaskButton(),
+      );
   }
 }
