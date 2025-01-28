@@ -9,6 +9,11 @@ class InboxScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return TaskList(tasksList: inboxModel.getTaskList());
+    return ListenableBuilder(
+      listenable: inboxModel, 
+      builder: (context, _){
+        return TaskList(tasksList: inboxModel.getTaskList());
+      }
+      ); 
   }
 }

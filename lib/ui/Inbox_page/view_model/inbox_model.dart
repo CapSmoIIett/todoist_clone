@@ -1,7 +1,8 @@
 
+import 'package:flutter/material.dart';
 import 'package:todoist_clone/ui/models/task_model.dart';
 
-class InboxModel {
+class InboxModel extends ChangeNotifier{
   
   List<TaskModel> exampleTasks = [
     TaskModel(title: 'Clean shit', descr: ' '),
