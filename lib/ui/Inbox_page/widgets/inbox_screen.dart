@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoist_clone/ui/Inbox_page/view_model/inbox_model.dart';
 import 'package:todoist_clone/ui/core/ui/task_list.dart';
 
@@ -9,11 +10,9 @@ class InboxScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return ListenableBuilder(
-      listenable: inboxModel, 
-      builder: (context, _){
-        return TaskList(tasksList: inboxModel.getTaskList());
-      }
+    return BlocProvider(
+      create: (_) => inboxModel, 
+      child: TaskList(tasksList: inboxModel.getTaskList())
       ); 
   }
 }

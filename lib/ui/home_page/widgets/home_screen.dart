@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InboxScreen(inboxModel: InboxModel())));
+                    MaterialPageRoute(builder: (context) => InboxScreen(inboxModel: InboxModel([]))));
               },
             );
           },
