@@ -11,17 +11,25 @@ class EditTaskSheet extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Expanded(
-                child: const Text('Project of task')
-            ),
+            const Expanded(child: const Text('Project of task')),
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             )
           ],
         ),
-        Text(task.title),
-        Text(task.descr)
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Task name",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none))),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Description",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none)))
       ],
     );
   }
