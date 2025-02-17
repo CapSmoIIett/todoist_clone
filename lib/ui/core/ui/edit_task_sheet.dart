@@ -3,6 +3,7 @@ import 'package:todoist_clone/ui/models/task_model.dart';
 
 class EditTaskSheet extends StatelessWidget {
   EditTaskSheet({required this.task, Key? key}) : super(key: key);
+
   final TaskModel task;
 
   @override
@@ -19,12 +20,15 @@ class EditTaskSheet extends StatelessWidget {
           ],
         ),
         TextField(
+          controller: TextEditingController(text: task.title),
           decoration: InputDecoration(
             hintText: "Task name",
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none))),
+              borderSide: BorderSide.none
+              ))),
         TextField(
+          controller: TextEditingController(text: task.descr),
           decoration: InputDecoration(
             hintText: "Description",
             border: OutlineInputBorder(
