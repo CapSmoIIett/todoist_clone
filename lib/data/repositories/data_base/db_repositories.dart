@@ -29,7 +29,7 @@ class DBProvider {
     String path = join(documentsDirectory.path, "TestDB.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Client ("
+      await db.execute("CREATE TABLE Tasks ("
           "id INTEGER PRIMARY KEY AUTO_INCREMENT,"
           "title TEXT,"
           "descr TEXT"
@@ -44,6 +44,14 @@ class DBProvider {
       "VALUES (${newTask.title}, ${newTask.descr});"
     );
     return res;
+  }
+
+  Future<List<TaskModel>> getTaskLists() async {
+    final db = await database;
+    var res = await db.query("Tasks");
+    List<TaskModel> list =
+        res.isNotEmpty ? res.map((c) => TaskModel.fromMap(c)).toList() : [];
+    return list;
   }
 }
 
