@@ -4,6 +4,8 @@ import '../../core/widgets/base_task_list.dart';
 import '../../core/widgets/edit_task_sheet.dart';
 import '../view_model/inbox_view_model.dart';
 import '../models/inbox_task_model.dart';
+import '../../core/widgets/add_task_sheet.dart';
+import 'inbox_task_list.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({Key? key}) : super(key: key);
@@ -31,23 +33,29 @@ class InboxScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: BaseTaskList<InboxTaskModel, InboxViewModel>(
-          onTaskTap: (context, task) {
+        body: const InboxTaskList(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              builder: (context) => EditTaskSheet<InboxTaskModel>(
-                task: task,
-                onSave: (oldTask, newTask) {
-                  context.read<InboxViewModel>().updateTask(oldTask, newTask);
+              builder: (context) => AddTaskSheet<InboxTaskModel>(
+                onSave: (task) {
+                  context.read<InboxViewModel>().addTask(task);
                 },
+                createTask: ({
+                  required String title,
+                  required String description,
+                  required DateTime dueDate,
+                  required Color priorityColor,
+                }) => InboxTaskModel(
+                  title: title,
+                  description: description,
+                  dueDate: dueDate,
+                  priorityColor: priorityColor,
+                ),
               ),
             );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // TODO: Implement add task
           },
           backgroundColor: Colors.red,
           child: const Icon(Icons.add),

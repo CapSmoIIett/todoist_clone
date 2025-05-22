@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/home_view_model.dart';
+import '../models/home_task_model.dart';
+import '../../core/widgets/add_task_sheet.dart';
 import 'home_task_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,7 +34,26 @@ class HomeScreen extends StatelessWidget {
         body: const HomeTaskList(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // TODO: Implement add task
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => AddTaskSheet<HomeTaskModel>(
+                onSave: (task) {
+                  context.read<HomeViewModel>().addTask(task);
+                },
+                createTask: ({
+                  required String title,
+                  required String description,
+                  required DateTime dueDate,
+                  required Color priorityColor,
+                }) => HomeTaskModel(
+                  title: title,
+                  description: description,
+                  dueDate: dueDate,
+                  priorityColor: priorityColor,
+                ),
+              ),
+            );
           },
           backgroundColor: Colors.red,
           child: const Icon(Icons.add),
