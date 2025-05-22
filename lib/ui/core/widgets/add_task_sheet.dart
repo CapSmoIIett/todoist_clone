@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/base_task_model.dart';
+import '../../../models/base_task_model.dart';
+import '../../core/view_models/base_task_view_model.dart';
 
-class AddTaskSheet<T extends BaseTaskModel> extends StatefulWidget {
-  final Function(T) onSave;
+class AddTaskSheet<T extends BaseTaskModel, V extends BaseTaskViewModel<T>> extends StatefulWidget {
+  final V viewModel;
   final T Function({
     required String title,
     required String description,
@@ -12,77 +13,32 @@ class AddTaskSheet<T extends BaseTaskModel> extends StatefulWidget {
 
   const AddTaskSheet({
     Key? key,
-    required this.onSave,
+    required this.viewModel,
     required this.createTask,
   }) : super(key: key);
 
   @override
-  State<AddTaskSheet<T>> createState() => _AddTaskSheetState<T>();
+  State<AddTaskSheet<T, V>> createState() => _AddTaskSheetState<T, V>();
 }
 
-class _AddTaskSheetState<T extends BaseTaskModel> extends State<AddTaskSheet<T>> {
+class _AddTaskSheetState<T extends BaseTaskModel, V extends BaseTaskViewModel<T>> extends State<AddTaskSheet<T, V>> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  DateTime _dueDate = DateTime.now();
-  Color _priorityColor = Colors.grey;
+  late DateTime _dueDate;
+  late Color _priorityColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _dueDate = DateTime.now();
+    _priorityColor = Colors.grey;
+  }
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
-  }
-
-  void _showDatePicker() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _dueDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
-    if (picked != null) {
-      setState(() {
-        _dueDate = picked;
-      });
-    }
-  }
-
-  void _showPriorityPicker() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Select Priority'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildPriorityOption(Colors.red, 'High'),
-            _buildPriorityOption(Colors.orange, 'Medium'),
-            _buildPriorityOption(Colors.green, 'Low'),
-            _buildPriorityOption(Colors.grey, 'None'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPriorityOption(Color color, String label) {
-    return ListTile(
-      leading: Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
-      ),
-      title: Text(label),
-      onTap: () {
-        setState(() {
-          _priorityColor = color;
-        });
-        Navigator.pop(context);
-      },
-    );
   }
 
   @override
@@ -97,6 +53,14 @@ class _AddTaskSheetState<T extends BaseTaskModel> extends State<AddTaskSheet<T>>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Add New Task',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(
@@ -120,8 +84,21 @@ class _AddTaskSheetState<T extends BaseTaskModel> extends State<AddTaskSheet<T>>
                 '${_dueDate.day}/${_dueDate.month}/${_dueDate.year}',
               ),
               trailing: const Icon(Icons.calendar_today),
-              onTap: _showDatePicker,
+              onTap: () async {
+                final date = await showDatePicker(
+                  context: context,
+                  initialDate: _dueDate,
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now().add(const Duration(days: 365)),
+                );
+                if (date != null) {
+                  setState(() {
+                    _dueDate = date;
+                  });
+                }
+              },
             ),
+            const SizedBox(height: 16),
             ListTile(
               title: const Text('Priority'),
               trailing: Container(
@@ -132,19 +109,43 @@ class _AddTaskSheetState<T extends BaseTaskModel> extends State<AddTaskSheet<T>>
                   shape: BoxShape.circle,
                 ),
               ),
-              onTap: _showPriorityPicker,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Select Priority'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildPriorityOption(Colors.red, 'High'),
+                        _buildPriorityOption(Colors.orange, 'Medium'),
+                        _buildPriorityOption(Colors.green, 'Low'),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                if (_titleController.text.isNotEmpty) {
-                  final task = widget.createTask(
-                    title: _titleController.text,
-                    description: _descriptionController.text,
-                    dueDate: _dueDate,
-                    priorityColor: _priorityColor,
+              onPressed: () async {
+                if (_titleController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a title'),
+                    ),
                   );
-                  widget.onSave(task);
+                  return;
+                }
+
+                final task = widget.createTask(
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  dueDate: _dueDate,
+                  priorityColor: _priorityColor,
+                );
+                await widget.viewModel.addTask(task);
+                if (mounted) {
                   Navigator.pop(context);
                 }
               },
@@ -153,6 +154,26 @@ class _AddTaskSheetState<T extends BaseTaskModel> extends State<AddTaskSheet<T>>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPriorityOption(Color color, String label) {
+    return ListTile(
+      title: Text(label),
+      trailing: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          _priorityColor = color;
+        });
+        Navigator.pop(context);
+      },
     );
   }
 } 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../models/base_task_model.dart';
 
-class InboxTaskModel extends BaseTaskModel {
-  const InboxTaskModel({
+class TodayTaskModel extends BaseTaskModel {
+  const TodayTaskModel({
     required super.title,
     required super.description,
     required super.dueDate,
@@ -11,14 +11,14 @@ class InboxTaskModel extends BaseTaskModel {
   });
 
   @override
-  InboxTaskModel copyWith({
+  TodayTaskModel copyWith({
     String? title,
     String? description,
     DateTime? dueDate,
     bool? isCompleted,
     Color? priorityColor,
   }) {
-    return InboxTaskModel(
+    return TodayTaskModel(
       title: title ?? this.title,
       description: description ?? this.description,
       dueDate: dueDate ?? this.dueDate,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home_page/widgets/home_screen.dart';
+import '../today_page/widgets/today_screen.dart';
 import '../Inbox_page/widgets/inbox_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -13,7 +13,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    const TodayScreen(),
     const InboxScreen(),
   ];
 
@@ -30,8 +30,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.today),
+            label: 'Today',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.inbox),

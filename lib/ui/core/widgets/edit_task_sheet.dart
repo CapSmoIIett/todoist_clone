@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/base_task_model.dart';
+import '../../../models/base_task_model.dart';
 
 class EditTaskSheet<T extends BaseTaskModel> extends StatefulWidget {
   final T task;
-  final void Function(T oldTask, T newTask) onSave;
+  final Function(T oldTask, T newTask) onSave;
 
   const EditTaskSheet({
     Key? key,
@@ -44,10 +44,19 @@ class _EditTaskSheetState<T extends BaseTaskModel> extends State<EditTaskSheet<T
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Edit Task',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(
@@ -67,7 +76,9 @@ class _EditTaskSheetState<T extends BaseTaskModel> extends State<EditTaskSheet<T
             const SizedBox(height: 16),
             ListTile(
               title: const Text('Due Date'),
-              subtitle: Text(_dueDate.toString().split(' ')[0]),
+              subtitle: Text(
+                '${_dueDate.day}/${_dueDate.month}/${_dueDate.year}',
+              ),
               trailing: const Icon(Icons.calendar_today),
               onTap: () async {
                 final date = await showDatePicker(
@@ -114,16 +125,16 @@ class _EditTaskSheetState<T extends BaseTaskModel> extends State<EditTaskSheet<T
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final updatedTask = widget.task.copyWith(
+                final newTask = widget.task.copyWith(
                   title: _titleController.text,
                   description: _descriptionController.text,
                   dueDate: _dueDate,
                   priorityColor: _priorityColor,
                 ) as T;
-                widget.onSave(widget.task, updatedTask);
+                widget.onSave(widget.task, newTask);
                 Navigator.pop(context);
               },
-              child: const Text('Save Changes'),
+              child: const Text('Save'),
             ),
           ],
         ),
@@ -134,7 +145,7 @@ class _EditTaskSheetState<T extends BaseTaskModel> extends State<EditTaskSheet<T
   Widget _buildPriorityOption(Color color, String label) {
     return ListTile(
       title: Text(label),
-      leading: Container(
+      trailing: Container(
         width: 24,
         height: 24,
         decoration: BoxDecoration(

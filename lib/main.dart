@@ -4,8 +4,13 @@ import 'package:todoist_clone/data/repositories/data_base/db_repositories.dart';
 import 'package:todoist_clone/data/services/task_list/task_list_service.dart';
 import 'package:todoist_clone/ui/core/navigation_view_model.dart';
 import 'package:todoist_clone/ui/core/navigation_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  // Инициализация SQLite для Windows
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+  
   runApp(
     MultiProvider(
       providers: [
